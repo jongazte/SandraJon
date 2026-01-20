@@ -1,104 +1,118 @@
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Invitación Sandra & Jon</title>
-
-<style>
-    body {
-        margin: 0;
-        background: #f6f0e9;
-        display: flex;
-        justify-content: center;
+<!DOCTYPE html;
         align-items: center;
         height: 100vh;
+        overflow: hidden;
         font-family: 'Georgia', serif;
     }
 
-    .container {
-        position: relative;
-        width: 320px;
-        height: 220px;
-    }
-
-    .envelope {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        background: #e9d9c7;
-        border-radius: 6px;
+ rgba(0,0,0,0.25);
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
+    /* SOLAPA */
     .flap {
         position: absolute;
         top: 0;
         width: 100%;
         height: 60%;
-        background: #d9c7b4;
+        background: linear-gradient(#d7c5b2, #c8b7a3);
         transform-origin: top;
-        transition: transform 1s ease;
-        z-index: 2;
         clip-path: polygon(0 0, 100% 0, 50% 100%);
+        transition: transform 1s ease;
+        z-index: 3;
     }
 
+    /* SELLO */
     .seal {
         position: absolute;
-        top: 52%;
+        top: 58%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 65px;
-        height: 65px;
-        background: #b08a74;
+        width: 70px;
+        height: 70px;
+        background: radial-gradient(circle, #b08a74, #8c6a55);
         border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 26px;
         color: white;
+        font-size: 26px;
         cursor: pointer;
-        z-index: 3;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+        z-index: 4;
         transition: transform .2s ease;
     }
 
     .seal:active {
-        transform: translate(-50%, -50%) scale(0.93);
+        transform: translate(-50%, -50%) scale(0.92);
     }
 
-    .message {
+    /* HOJA */
+    .card {
         position: absolute;
-        width: 100%;
-        top: 45%;
+        top: 65%;
+        left: 50%;
+        transform: translateX(-50%) translateY(0);
+        width: 90%;
+        height: 70%;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        display: flex;
+        justify-content: center;
+        align-items: center;
         text-align: center;
+        padding: 20px;
         opacity: 0;
-        font-size: 24px;
+        transition: all 1.3s ease;
+        z-index: 1;
+        font-size: 22px;
         color: #7a5a43;
         font-weight: bold;
-        transition: opacity 1.2s ease;
-        z-index: 1;
     }
 
-    .open .flap {
-        transform: rotateX(-130deg);
-    }
-
-    .open .message {
+    /* HOJA SUBE */
+    .open .card {
+        transform: translateX(-50%) translateY(-60%);
         opacity: 1;
     }
-</style>
 
+    /* SOLAPA SE ABRE */
+    .open .flap {
+        transform: rotateX(-140deg);
+    }
+
+    /* CONFETI */
+    .confetti {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        top: -20px;
+        left: 50%;
+        opacity: 0;
+        animation: fall 3s linear forwards;
+        border-radius: 50%;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+</style>
 </head>
+
 <body>
 
 <div class="container">
     <div class="envelope" id="envelope">
         <div class="flap"></div>
         <div class="seal" id="seal">✶</div>
-        <div class="message">¡Estás invitado!</div>
+
+        <div class="card" id="card">
+            ¡Estás invitado a nuestra boda!
+        </div>
     </div>
 </div>
 
@@ -109,6 +123,21 @@
     seal.addEventListener("click", () => {
         envelope.classList.add("open");
 
+        // Confeti
+        for (let i = 0; i < 40; i++) {
+            let confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.backgroundColor = 
+                ["#e6b17e", "#d36c6c", "#90c8ac", "#f2d388", "#d4a373"][Math.floor(Math.random()*5)];
+            confetti.style.animationDelay = (Math.random() * 1) + "s";
+            confetti.style.width = confetti.style.height = (6 + Math.random()*8) + "px";
+            document.body.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 4000);
+        }
+
+        // Redirección
         setTimeout(() => {
             window.location.href = "https://revista-religion.my.canva.site/sandrajon270626";
         }, 5000);
