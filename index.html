@@ -7,19 +7,28 @@
 <title>Invitación Sandra & Jon</title>
 
 <style>
+  :root{
+    --bg: #e7d7c3;
+    --env: #2f2f33;    /* cuerpo del sobre */
+    --flap: #2c2c30;   /* solapa */
+    --gold: #d4a256;   /* dorado elegante */
+    --ink: #6a543e;    /* tinta del texto */
+  }
+
   body{
     margin:0;
-    background:#e7d7c3;
+    background:var(--bg);
     display:flex;
     justify-content:center;
     align-items:center;
     height:100vh;
     font-family:'Georgia',serif;
     overflow:hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .stage{
-    width:min(95vw,420px);
+    width:min(95vw, 420px);
     position:relative;
     perspective:1200px;
   }
@@ -28,53 +37,87 @@
   .envelope{
     width:100%;
     height:300px;
-    background:#2f2f33;
-    border-radius:12px;
+    background:var(--env);
+    border-radius:14px;
     position:relative;
-    box-shadow:0 6px 20px rgba(0,0,0,.25);
+    box-shadow:0 10px 26px rgba(0,0,0,.25);
     overflow:visible;
   }
-  
-  /* Solapa */
+
+  /* Ribete dorado exterior del cuerpo del sobre */
+  .envelope::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border-radius:12px;
+    border:2px solid var(--gold);
+    pointer-events:none;
+    opacity:.9;
+    z-index:1;
+  }
+
+  /* Solapa triangular */
   .flap{
     position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:60%;
-    background:#2c2c30;
-    transform-origin:top;
-    clip-path:polygon(0 0,100% 0,50% 100%);
-    transition:transform 1.2s ease;
+    top:0; left:0;
+    width:100%; height:60%;
+    background:linear-gradient(180deg, #3a3a3f, var(--flap));
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 1.2s ease;
     z-index:3;
   }
 
-  /* SELLO ROJO TIPO LACRE */
+  /* Ribete dorado en la solapa (siguiendo el borde) */
+  .flap::after{
+    content:"";
+    position:absolute;
+    top:4px; left:4px; right:4px;
+    height:calc(60% - 8px);
+    border-top:2px solid var(--gold);
+    /* contorno interior triangular */
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
+    z-index:4;
+    opacity:.95;
+  }
+
+  /* SELLO: rojo lacre, con S&J centrado */
   .seal{
     position:absolute;
     top:63%;
     left:50%;
     transform:translate(-50%,-50%);
-    width:75px;
-    height:75px;
-    background: radial-gradient(circle at 30% 30%, #b73838, #8b1919);
+    width:78px; height:78px;
     border-radius:50%;
-    box-shadow:0 5px 12px rgba(0,0,0,.3),
-               inset 0 2px 4px rgba(255,255,255,.2);
+    background: radial-gradient(circle at 30% 30%, #bf4040, #8f1d1d 70%);
+    box-shadow: 0 6px 14px rgba(0,0,0,.35),
+                inset 0 2px 4px rgba(255,255,255,.22);
     cursor:pointer;
     z-index:5;
+    border:2px solid rgba(0,0,0,.15);
+  }
+
+  .seal::before{
+    /* aro interior suave */
+    content:"";
+    position:absolute;
+    inset:10px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,.25);
+    box-shadow: inset 0 0 6px rgba(0,0,0,.18);
   }
 
   .seal::after{
-    content:"S · J";
+    content:"S&J";
     position:absolute;
     top:50%; left:50%;
     transform:translate(-50%,-50%);
-    color:#f8d7d7;
-    font-weight:bold;
-    font-size:20px;
-    font-family:'Times New Roman',serif;
-    letter-spacing:2px;
+    color:#fbe3e3;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:1px;
+    font-family: "Times New Roman", Georgia, serif;
+    text-shadow: 0 1px 0 rgba(0,0,0,.25);
   }
 
   .tap-hint{
@@ -83,59 +126,64 @@
     text-align:center;
     top:86%;
     font-size:16px;
-    color:#6a543e;
-    font-weight:bold;
+    color:var(--ink);
+    font-weight:700;
     animation:fadehint 1.6s ease-in-out infinite;
     z-index:1;
   }
-
   @keyframes fadehint{
-    0%{opacity:0.4;}
-    50%{opacity:1;}
-    100%{opacity:0.4;}
+    0%{opacity:.45;} 50%{opacity:1;} 100%{opacity:.45;}
   }
 
   /* HOJA INTERIOR */
   .card{
     width:90%;
     height:260px;
-    background:white;
+    background:#fff;
     position:absolute;
     left:50%;
     top:40%;
     transform:translate(-50%,50%);
     border-radius:16px;
     box-shadow:0 6px 22px rgba(0,0,0,.25);
-    padding:25px;
+    padding:25px 20px;
     text-align:center;
     opacity:0;
-    transition:all 1.3s ease;
-    z-index:10; /* Ahora SIEMPRE por encima de la solapa */
+    transition:transform 1.3s ease, opacity 1.3s ease;
+    z-index:10; /* por encima de la solapa */
   }
 
-  /* Ribete dorado elegante */
-  .card:before{
+  /* Ribete dorado interior de la hoja */
+  .card::before{
     content:"";
     position:absolute;
     inset:14px;
-    border:3px solid #d4a256;
+    border:3px solid var(--gold);
     border-radius:12px;
     pointer-events:none;
   }
 
   .message{
-    margin-top:25px;
+    margin-top:18px;
+    color:var(--ink);
+    line-height:1.35;
+  }
+
+  .message .title{
     font-size:24px;
-    color:#6a543e;
-    font-weight:bold;
-    line-height:1.4;
+    font-weight:700;
+    margin-bottom:10px;
+  }
+
+  .message .names{
+    font-size:18px;
+    font-weight:700;
+    color:#9a775a;
+    margin-top:6px;
   }
 
   /* Estado abierto */
-  .open .flap{
-    transform:rotateX(-150deg);
-  }
-
+  .open .flap{ transform: rotateX(-150deg); }
   .open .card{
     opacity:1;
     transform:translate(-50%,-60%);
@@ -145,23 +193,18 @@
   .confetti{
     position:fixed;
     top:-10px;
-    width:10px;
-    height:10px;
+    width:10px; height:10px;
     opacity:0;
     animation:fall 3s linear forwards;
     border-radius:2px;
     pointer-events:none;
   }
-
-  .confetti.round{
-    border-radius:50%;
-  }
+  .confetti.round{ border-radius:50%; }
 
   @keyframes fall{
     0%{opacity:1; transform:translateY(0) rotate(0deg);}
     100%{opacity:0; transform:translateY(120vh) rotate(720deg);}
   }
-
 </style>
 </head>
 
@@ -171,19 +214,25 @@
   <div class="envelope" id="envelope">
     <div class="flap"></div>
 
-    <button class="seal" id="seal"></button>
+    <!-- Sello clicable -->
+    <button class="seal" id="seal" aria-label="Abrir invitación"></button>
 
+    <!-- Indicador -->
     <div class="tap-hint">Pulsa en el sello para abrir el sobre</div>
 
-    <div class="card" id="card">
-      <div class="message">Has sido invitado<br>a nuestra boda</div>
+    <!-- Hoja con texto -->
+    <div class="card" id="card" aria-live="polite">
+      <div class="message">
+        <div class="title">Has sido invitado a nuestra boda</div>
+        <div class="names">Sandra &amp; Jon</div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-  const seal=document.getElementById("seal");
-  const envelope=document.getElementById("envelope");
+  const seal = document.getElementById("seal");
+  const envelope = document.getElementById("envelope");
 
   function confetti(){
     const colors=["#d4a256","#e8c27c","#c1785c","#fff3d6","#b99d7c"];
@@ -191,12 +240,12 @@
       let p=document.createElement("div");
       p.className="confetti "+(Math.random()>0.5?"round":"");
       p.style.left=Math.random()*100+"vw";
-      let size=7+Math.random()*10;
+      const size = 7 + Math.random()*10;
       p.style.width=p.style.height=size+"px";
       p.style.background=colors[Math.floor(Math.random()*colors.length)];
       p.style.animationDuration=(2.5+Math.random()*1.5)+"s";
       document.body.appendChild(p);
-      setTimeout(()=>p.remove(),4000);
+      setTimeout(()=>p.remove(), 4200);
     }
   }
 
@@ -204,10 +253,11 @@
     envelope.classList.add("open");
     confetti();
 
+    // Redirección tras 5 s (puedes ajustar el tiempo)
     setTimeout(()=>{
       window.location.href="https://revista-religion.my.canva.site/sandrajon270626";
-    },5000);
-  },{once:true});
+    }, 5000);
+  }, { once:true });
 </script>
 
 </body>
