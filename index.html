@@ -43,7 +43,7 @@
     overflow:visible;
   }
 
-  /* Ribete dorado exterior */
+  /* RIBETE EXTERIOR DEL SOBRE ENTERO */
   .envelope::before{
     content:"";
     position:absolute;
@@ -54,200 +54,62 @@
     opacity:.9;
   }
 
-  /* Solapa superior triangular */
+  /* SOLAPA SUPERIOR */
   .flap{
     position:absolute;
     top:0; left:0;
     width:100%; height:60%;
-    background:linear-gradient(180deg, #3a3a3f, var(--flap));
+    background:var(--flap);
     clip-path:polygon(0 0, 100% 0, 50% 100%);
-    transform-origin: top;
+    transform-origin:top center;
     transition:transform 1.2s ease;
     z-index:3;
   }
 
-  /* RIBETE DORADO COMPLETO DE LA SOLAPA (nuevo) */
+  /* RIBETE DORADO SUPERIOR + LÍNEAS EN V (ESTILO DEL ADJUNTO) */
   .flap::before{
     content:"";
     position:absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    border-top:3px solid var(--gold);
-    border-left:3px solid var(--gold);
-    border-right:3px solid var(--gold);
-    border-radius:12px 12px 0 0;
+    inset:0;
+    background:
+      linear-gradient(to right, var(--gold), var(--gold)) top/100% 3px no-repeat,
+      linear-gradient(var(--gold), var(--gold)) left top/3px 100% no-repeat,
+      linear-gradient(var(--gold), var(--gold)) right top/3px 100% no-repeat;
+    /* esto crea el ribete superior horizontal */
     clip-path:polygon(0 0, 100% 0, 50% 100%);
     pointer-events:none;
     z-index:10;
   }
 
-  /* Sello */
+  /* V dorada completa */
+  .flap::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%; height:100%;
+    pointer-events:none;
+    z-index:11;
+    background:
+      linear-gradient(
+        60deg,
+        transparent 0%,
+        transparent 44%,
+        var(--gold) 45%,
+        var(--gold) 48%,
+        transparent 49%
+      ) left top/100% 100% no-repeat,
+      linear-gradient(
+        -60deg,
+        transparent 0%,
+        transparent 44%,
+        var(--gold) 45%,
+        var(--gold) 48%,
+        transparent 49%
+      ) right top/100% 100% no-repeat;
+  }
+
+  /* SELLO */
   .seal{
     position:absolute;
     top:63%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:78px; height:78px;
-    border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, #bf4040, #8f1d1d 72%);
-    box-shadow: 0 6px 14px rgba(0,0,0,.35),
-                inset 0 2px 4px rgba(255,255,255,.25);
-    cursor:pointer;
-    z-index:5;
-  }
-
-  .seal::before{
-    content:"";
-    position:absolute;
-    inset:10px;
-    border-radius:50%;
-    border:2px solid rgba(255,255,255,.28);
-    box-shadow: inset 0 0 6px rgba(0,0,0,.18);
-  }
-
-  .seal::after{
-    content:"S&J";
-    position:absolute;
-    top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    color:#fae6e6;
-    font-weight:700;
-    font-size:22px;
-    letter-spacing:1px;
-    font-family:"Times New Roman",serif;
-    text-shadow:0 1px 0 rgba(0,0,0,.25);
-  }
-
-  .tap-hint{
-    position:absolute;
-    width:100%;
-    text-align:center;
-    top:86%;
-    font-size:16px;
-    color:var(--ink);
-    font-weight:700;
-    animation:fadehint 1.6s ease-in-out infinite;
-  }
-
-  @keyframes fadehint{
-    0%{opacity:.45;} 50%{opacity:1;} 100%{opacity:.45;}
-  }
-
-  /* HOJA INTERIOR */
-  .card{
-    width:90%;
-    height:260px;
-    background:white;
-    position:absolute;
-    left:50%;
-    top:40%;
-    transform:translate(-50%,50%);
-    border-radius:16px;
-    box-shadow:0 6px 22px rgba(0,0,0,.25);
-    padding:25px 20px;
-    text-align:center;
-    opacity:0;
-    transition:transform 1.3s ease, opacity 1.3s ease;
-    z-index:10;
-  }
-
-  .card::before{
-    content:"";
-    position:absolute;
-    inset:14px;
-    border:3px solid var(--gold);
-    border-radius:12px;
-  }
-
-  .message .title{
-    font-size:24px;
-    font-weight:700;
-  }
-
-  .message .names{
-    font-size:20px;
-    font-weight:700;
-    margin-top:12px;
-    color:#9a775a;
-  }
-
-  /* Al abrir */
-  .open .flap{
-    transform:rotateX(-150deg);
-  }
-
-  .open .card{
-    opacity:1;
-    transform:translate(-50%,-60%);
-  }
-
-  /* Confeti */
-  .confetti{
-    position:fixed;
-    top:-10px;
-    width:10px; height:10px;
-    opacity:0;
-    animation:fall 3s linear forwards;
-    border-radius:2px;
-    pointer-events:none;
-  }
-  .confetti.round{ border-radius:50%; }
-
-  @keyframes fall{
-    0%{opacity:1; transform:translateY(0) rotate(0deg);}
-    100%{opacity:0; transform:translateY(120vh) rotate(720deg);}
-  }
-</style>
-</head>
-
-<body>
-
-<div class="stage">
-  <div class="envelope" id="envelope">
-
-    <div class="flap"></div>
-
-    <button class="seal" id="seal"></button>
-
-    <div class="tap-hint">Pulsa en el sello para abrir el sobre</div>
-
-    <div class="card" id="card">
-      <div class="message">
-        <div class="title">Has sido invitado a nuestra boda</div>
-        <div class="names">Sandra &amp; Jon</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-  const seal=document.getElementById("seal");
-  const envelope=document.getElementById("envelope");
-
-  function confetti(){
-    const colors=["#d4a256","#e8c27c","#c1785c","#fff3d6","#b99d7c"];
-    for(let i=0;i<70;i++){
-      let p=document.createElement("div");
-      p.className="confetti "+(Math.random()>0.5?"round":"");
-      p.style.left=Math.random()*100+"vw";
-      const size = 7 + Math.random()*10;
-      p.style.width=p.style.height=size+"px";
-      p.style.background=colors[Math.floor(Math.random()*colors.length)];
-      p.style.animationDuration=(2.5+Math.random()*1.5)+"s";
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(),4200);
-    }
-  }
-
-  seal.addEventListener("click",()=>{
-    envelope.classList.add("open");
-    confetti();
-    setTimeout(()=>{
-      window.location.href="https://revista-religion.my.canva.site/sandrajon270626";
-    },5000);
-  },{once:true});
-</script>
-
-</body>
-</html>
