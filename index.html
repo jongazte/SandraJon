@@ -1,148 +1,260 @@
 
-<!DOCTYPE html;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
-        font-family: 'Georgia', serif;
-    }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Invitación Sandra & Jon</title>
 
- rgba(0,0,0,0.25);
-        overflow: hidden;
-    }
+<style>
+  :root{
+    --bg: #f6f0e9;
+    --paper: #ffffff;
+    --env: #e9d9c7;
+    --flap: #d7c5b2;
+    --shadow: rgba(0,0,0,0.18);
+    --ink: #7a5a43;
+    --seal1: #b08a74;
+    --seal2: #8c6a55;
+    --gold: #d6b278;
+  }
 
-    /* SOLAPA */
-    .flap {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 60%;
-        background: linear-gradient(#d7c5b2, #c8b7a3);
-        transform-origin: top;
-        clip-path: polygon(0 0, 100% 0, 50% 100%);
-        transition: transform 1s ease;
-        z-index: 3;
-    }
+  html, body {
+    height: 100%;
+  }
 
-    /* SELLO */
-    .seal {
-        position: absolute;
-        top: 58%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 70px;
-        height: 70px;
-        background: radial-gradient(circle, #b08a74, #8c6a55);
-        border-radius: 50%;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        font-size: 26px;
-        cursor: pointer;
-        z-index: 4;
-        transition: transform .2s ease;
-    }
+  body {
+    margin: 0;
+    background: var(--bg);
+    display: grid;
+    place-items: center;
+    font-family: Georgia, 'Times New Roman', serif;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    .seal:active {
-        transform: translate(-50%, -50%) scale(0.92);
-    }
+  /* Contenedor base pensado para móvil */
+  .stage{
+    width: min(92vw, 420px);
+    height: min(62vh, 420px);
+    position: relative;
+    perspective: 1200px; /* para la animación 3D de la solapa */
+  }
 
-    /* HOJA */
-    .card {
-        position: absolute;
-        top: 65%;
-        left: 50%;
-        transform: translateX(-50%) translateY(0);
-        width: 90%;
-        height: 70%;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
-        opacity: 0;
-        transition: all 1.3s ease;
-        z-index: 1;
-        font-size: 22px;
-        color: #7a5a43;
-        font-weight: bold;
-    }
+  /* Sobre */
+  .envelope{
+    position: absolute;
+    inset: 0;
+    background: var(--env);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px var(--shadow);
+    overflow: hidden;
+  }
 
-    /* HOJA SUBE */
-    .open .card {
-        transform: translateX(-50%) translateY(-60%);
-        opacity: 1;
-    }
+  /* Frente del sobre (zona inferior) – una ligera sombra decorativa */
+  .envelope::after{
+    content:"";
+    position:absolute;
+    inset: 55% 0 0 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.03), transparent 40%);
+  }
 
-    /* SOLAPA SE ABRE */
-    .open .flap {
-        transform: rotateX(-140deg);
-    }
+  /* Solapa superior (triángulo) */
+  .flap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; height: 62%;
+    background: linear-gradient(#e3d4c4, var(--flap));
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 1s ease;
+    z-index: 3;
+  }
 
-    /* CONFETI */
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background-color: red;
-        top: -20px;
-        left: 50%;
-        opacity: 0;
-        animation: fall 3s linear forwards;
-        border-radius: 50%;
-    }
+  /* Sello circular */
+  .seal{
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    width: 76px; height: 76px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--seal1), var(--seal2) 70%);
+    box-shadow: 0 8px 18px rgba(0,0,0,.22), inset 0 1px 4px rgba(255,255,255,.35);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 26px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    z-index: 4;
+    transition: transform .15s ease;
+    user-select: none;
+  }
+  .seal:active { transform: translate(-50%, -50%) scale(.94); }
 
-    @keyframes fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
+  /* Detalle del sello (anillo dorado) */
+  .seal::before{
+    content:"";
+    position:absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.25);
+    box-shadow: 0 0 0 2px rgba(0,0,0,.08) inset;
+  }
+  .seal::after{
+    content:"S · J";
+    font-family: "Times New Roman", Georgia, serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0,0,0,.15);
+  }
+
+  /* Hoja interior que sale */
+  .card{
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    transform: translateX(-50%) translateY(0);
+    width: 86%;
+    height: 72%;
+    background: var(--paper);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    opacity: 0;
+    transition: transform 1.2s ease, opacity 1.2s ease;
+    z-index: 2;
+  }
+
+  /* Borde decorativo de la hoja */
+  .card::before{
+    content:"";
+    position:absolute;
+    inset: 12px;
+    border-radius: 10px;
+    border: 1.5px solid #eadccf;
+    pointer-events: none;
+  }
+
+  .message{
+    text-align: center;
+    color: var(--ink);
+    font-weight: 700;
+    line-height: 1.35;
+    font-size: clamp(18px, 4.5vw, 24px);
+  }
+
+  .message em{
+    font-weight: 400;
+    font-style: normal;
+    color: #9a775a;
+  }
+
+  /* Estados al abrir */
+  .open .flap{ transform: rotateX(-150deg); }
+  .open .card{
+    transform: translateX(-50%) translateY(-55%);
+    opacity: 1;
+  }
+
+  /* Confeti */
+  .confetti{
+    position: fixed;
+    top: -12px;
+    width: 10px; height: 10px;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    animation: fall 3.2s linear forwards;
+    border-radius: 2px;
+  }
+  /* piezas circulares alternas */
+  .confetti.round{ border-radius: 50%; }
+  @keyframes fall{
+    0%   { transform: translateY(0) rotate(0);   opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Responsivo fino para móviles muy pequeños */
+  @media (max-height: 600px){
+    .stage{ height: 360px; }
+  }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="stage">
     <div class="envelope" id="envelope">
-        <div class="flap"></div>
-        <div class="seal" id="seal">✶</div>
+      <div class="flap" aria-hidden="true"></div>
 
-        <div class="card" id="card">
-            ¡Estás invitado a nuestra boda!
+      <!-- Sello clicable -->
+      <button class="seal" id="seal" aria-label="Abrir invitación"></button>
+
+      <!-- Hoja que aparece -->
+      <section class="card" id="card" aria-live="polite">
+        <div class="message">
+          ¡Estás invitado<br/>a nuestra boda!<br/>
+          <em>Sandra & Jon</em>
         </div>
+      </section>
     </div>
-</div>
+  </div>
 
 <script>
-    const seal = document.getElementById("seal");
-    const envelope = document.getElementById("envelope");
+  const seal = document.getElementById('seal');
+  const envelope = document.getElementById('envelope');
 
-    seal.addEventListener("click", () => {
-        envelope.classList.add("open");
+  // Paleta de confeti elegante (oro, terracota, verde salvia, champán, crema)
+  const CONFETTI_COLORS = ['#d6b278','#d36c6c','#90c8ac','#f2d388','#eadccf','#a78674'];
 
-        // Confeti
-        for (let i = 0; i < 40; i++) {
-            let confetti = document.createElement("div");
-            confetti.classList.add("confetti");
-            confetti.style.left = Math.random() * 100 + "vw";
-            confetti.style.backgroundColor = 
-                ["#e6b17e", "#d36c6c", "#90c8ac", "#f2d388", "#d4a373"][Math.floor(Math.random()*5)];
-            confetti.style.animationDelay = (Math.random() * 1) + "s";
-            confetti.style.width = confetti.style.height = (6 + Math.random()*8) + "px";
-            document.body.appendChild(confetti);
+  function launchConfetti(){
+    const COUNT = 70; // cantidad de confeti
+    for(let i=0;i<COUNT;i++){
+      const p = document.createElement('div');
+      const isRound = Math.random() > 0.5;
+      p.className = 'confetti' + (isRound ? ' round' : '');
 
-            setTimeout(() => confetti.remove(), 4000);
-        }
+      // posición horizontal aleatoria
+      p.style.left = (Math.random()*100) + 'vw';
 
-        // Redirección
-        setTimeout(() => {
-            window.location.href = "https://revista-religion.my.canva.site/sandrajon270626";
-        }, 5000);
-    });
+      // tamaño aleatorio
+      const size = 6 + Math.random()*10;
+      p.style.width = size + 'px';
+      p.style.height = size + (isRound ? 'px' : 'px');
+
+      // color aleatorio
+      p.style.background = CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
+
+      // retardo y duración aleatorios para naturalidad
+      const delay = (Math.random()*0.8).toFixed(2);
+      const duration = (2.6 + Math.random()*1.2).toFixed(2);
+      p.style.animationDelay = delay + 's';
+      p.style.animationDuration = duration + 's';
+
+      document.body.appendChild(p);
+      // Limpieza
+      setTimeout(()=> p.remove(), (parseFloat(delay)+parseFloat(duration))*1000 + 300);
+    }
+  }
+
+  seal.addEventListener('click', () => {
+    // abrir sobre
+    envelope.classList.add('open');
+
+    // confeti
+    launchConfetti();
+
+    // redirección tras 5s
+    setTimeout(() => {
+      window.location.href = 'https://revista-religion.my.canva.site/sandrajon270626';
+    }, 5000);
+  }, { once: true }); // evita múltiples disparos
 </script>
-
 </body>
 </html>
