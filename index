@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Invitación Sandra & Jon</title>
+
+<style>
+    body {
+        margin: 0;
+        background: #f6f0e9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Georgia', serif;
+    }
+
+    .container {
+        position: relative;
+        width: 320px;
+        height: 220px;
+    }
+
+    .envelope {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #e9d9c7;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .flap {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 60%;
+        background: #d9c7b4;
+        transform-origin: top;
+        transition: transform 1s ease;
+        z-index: 2;
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+
+    .seal {
+        position: absolute;
+        top: 52%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 65px;
+        height: 65px;
+        background: #b08a74;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 26px;
+        color: white;
+        cursor: pointer;
+        z-index: 3;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+        transition: transform .2s ease;
+    }
+
+    .seal:active {
+        transform: translate(-50%, -50%) scale(0.93);
+    }
+
+    .message {
+        position: absolute;
+        width: 100%;
+        top: 45%;
+        text-align: center;
+        opacity: 0;
+        font-size: 24px;
+        color: #7a5a43;
+        font-weight: bold;
+        transition: opacity 1.2s ease;
+        z-index: 1;
+    }
+
+    .open .flap {
+        transform: rotateX(-130deg);
+    }
+
+    .open .message {
+        opacity: 1;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="envelope" id="envelope">
+        <div class="flap"></div>
+        <div class="seal" id="seal">✶</div>
+        <div class="message">¡Estás invitado!</div>
+    </div>
+</div>
+
+<script>
+    const seal = document.getElementById("seal");
+    const envelope = document.getElementById("envelope");
+
+    seal.addEventListener("click", () => {
+        envelope.classList.add("open");
+
+        setTimeout(() => {
+            window.location.href = "https://revista-religion.my.canva.site/sandrajon270626";
+        }, 5000);
+    });
+</script>
+
+</body>
+</html>
